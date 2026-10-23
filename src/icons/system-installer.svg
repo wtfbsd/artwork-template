@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- @NAME@ system installer icon: arrow dropping onto an accent base.
+     Tokens are substituted by scripts/render.sh. Designed to stay legible
+     at 16px. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="@NAME@ installer">
+  <title>@NAME@ system installer</title>
+  <rect x="0" y="0" width="512" height="512" rx="88" ry="88" fill="#@DARK2@"/>
+  <rect x="216" y="104" width="80" height="140" rx="16" ry="16" fill="#@LIGHT@"/>
+  <path d="M150 230 L362 230 L256 372 Z" fill="#@LIGHT@"/>
+  <rect x="136" y="414" width="240" height="36" rx="18" ry="18" fill="#@ACCENT@"/>
+</svg>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- @NAME@ LightDM greeter background, 1920x1080. Tokens are substituted by
+     scripts/render.sh. Subtle dark gradient with a faint watermark mark and
+     no text. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" preserveAspectRatio="xMidYMid slice">
+  <title>@NAME@ greeter background</title>
+  <defs>
+    <linearGradient id="greeter-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#@DARK@"/>
+      <stop offset="1" stop-color="#@DARK2@"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="1920" height="1080" fill="url(#greeter-bg)"/>
+  <g transform="translate(720,300) scale(1.071429)">
+    <rect x="0" y="0" width="448" height="448" rx="104" ry="104" fill="#@LIGHT@" fill-opacity="0.05"/>
+    <rect x="80" y="104" width="288" height="48" rx="24" ry="24" fill="#@DARK@" fill-opacity="0.35"/>
+    <rect x="80" y="200" width="208" height="48" rx="24" ry="24" fill="#@ACCENT@" fill-opacity="0.25"/>
+    <rect x="80" y="296" width="288" height="48" rx="24" ry="24" fill="#@DARK@" fill-opacity="0.35"/>
+  </g>
+</svg>

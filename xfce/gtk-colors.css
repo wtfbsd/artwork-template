@@ -1,0 +1,29 @@
+/* @NAME@ GTK3 color overrides.
+ *
+ * Usage: import from ~/.config/gtk-3.0/gtk.css (or a packaged theme), e.g.
+ *   @import url("/usr/local/share/@NAME_LOWER@/xfce/gtk-colors.css");
+ *
+ * All colors come from the palette; edit palette.env and re-render instead
+ * of editing this file by hand.
+ */
+@define-color theme_bg_color #@LIGHT@; /* NOSONAR -- GTK CSS @define-color, valid for GTK3 */
+@define-color theme_fg_color #@DARK@; /* NOSONAR -- GTK CSS @define-color, valid for GTK3 */
+@define-color theme_base_color #@LIGHT@; /* NOSONAR -- GTK CSS @define-color, valid for GTK3 */
+@define-color theme_text_color #@DARK@; /* NOSONAR -- GTK CSS @define-color, valid for GTK3 */
+@define-color theme_selected_bg_color #@PRIMARY@; /* NOSONAR -- GTK CSS @define-color, valid for GTK3 */
+@define-color theme_selected_fg_color #@LIGHT@; /* NOSONAR -- GTK CSS @define-color, valid for GTK3 */
+@define-color theme_unfocused_bg_color #@DARK2@; /* NOSONAR -- GTK CSS @define-color, valid for GTK3 */
+@define-color theme_unfocused_fg_color #@MUTED@; /* NOSONAR -- GTK CSS @define-color, valid for GTK3 */
+@define-color theme_unfocused_base_color #@DARK2@; /* NOSONAR -- GTK CSS @define-color, valid for GTK3 */
+@define-color theme_unfocused_text_color #@MUTED@; /* NOSONAR -- GTK CSS @define-color, valid for GTK3 */
+@define-color theme_unfocused_selected_bg_color #@DARK2@; /* NOSONAR -- GTK CSS @define-color, valid for GTK3 */
+@define-color theme_unfocused_selected_fg_color #@LIGHT@; /* NOSONAR -- GTK CSS @define-color, valid for GTK3 */
+@define-color theme_title_bg_color #@DARK@; /* NOSONAR -- GTK CSS @define-color, valid for GTK3 */
+@define-color theme_title_color #@LIGHT@; /* NOSONAR -- GTK CSS @define-color, valid for GTK3 */
+@define-color theme_titlebar_bg_color #@DARK@; /* NOSONAR -- GTK CSS @define-color, valid for GTK3 */
+@define-color theme_titlebar_fg_color #@LIGHT@; /* NOSONAR -- GTK CSS @define-color, valid for GTK3 */
+@define-color theme_titlebar_bg_backdrop #@DARK2@; /* NOSONAR -- GTK CSS @define-color, valid for GTK3 */
+@define-color theme_titlebar_fg_backdrop #@MUTED@; /* NOSONAR -- GTK CSS @define-color, valid for GTK3 */
+@define-color accent_bg_color #@ACCENT@; /* NOSONAR -- GTK CSS @define-color, valid for GTK3 */
+@define-color accent_fg_color #@LIGHT@; /* NOSONAR -- GTK CSS @define-color, valid for GTK3 */
+@define-color accent_color #@ACCENT@; /* NOSONAR -- GTK CSS @define-color, valid for GTK3 */

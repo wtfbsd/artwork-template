@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- @NAME@ favicon, simplified mark. Tokens are substituted by
+     scripts/render.sh. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>@NAME@ favicon</title>
+  <rect x="0" y="0" width="64" height="64" rx="14" ry="14" fill="#@PRIMARY@"/>
+  <rect x="13" y="15" width="38" height="8" rx="4" ry="4" fill="#@LIGHT@"/>
+  <rect x="13" y="28" width="26" height="8" rx="4" ry="4" fill="#@ACCENT@"/>
+  <rect x="13" y="41" width="38" height="8" rx="4" ry="4" fill="#@LIGHT@"/>
+</svg>

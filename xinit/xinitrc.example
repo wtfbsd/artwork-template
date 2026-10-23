@@ -1,0 +1,4 @@
+#!/bin/sh
+# @NAME@ example ~/.xinitrc — start the Xfce session (X11 only, no Wayland).
+# Install as ~/.xinitrc, then run:  startx
+exec startxfce4

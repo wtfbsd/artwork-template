@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- @NAME@ boot splash, 1024x768. Tokens are substituted by scripts/render.sh. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 768" width="1024" height="768">
+  <title>@NAME@ splash</title>
+  <rect x="0" y="0" width="1024" height="768" fill="#@DARK@"/>
+  <g transform="translate(412,192) scale(0.446429)">
+    <rect x="0" y="0" width="448" height="448" rx="104" ry="104" fill="#@PRIMARY@"/>
+    <rect x="80" y="104" width="288" height="48" rx="24" ry="24" fill="#@LIGHT@"/>
+    <rect x="80" y="200" width="208" height="48" rx="24" ry="24" fill="#@ACCENT@"/>
+    <rect x="80" y="296" width="288" height="48" rx="24" ry="24" fill="#@LIGHT@"/>
+  </g>
+  <text x="512" y="480" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="72" font-weight="bold" fill="#@LIGHT@" letter-spacing="2">@NAME@</text>
+  <rect x="402" y="512" width="220" height="8" rx="4" ry="4" fill="#@ACCENT@"/>
+  <text x="512" y="576" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="32" fill="#@MUTED@">@TAGLINE@</text>
+</svg>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- @NAME@ installer header banner, 800x96. Tokens are substituted by scripts/render.sh. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 96" width="800" height="96">
+  <title>@NAME@ installer header</title>
+  <rect x="0" y="0" width="800" height="96" fill="#@DARK2@"/>
+  <g transform="translate(16,16) scale(0.142857)">
+    <rect x="0" y="0" width="448" height="448" rx="104" ry="104" fill="#@PRIMARY@"/>
+    <rect x="80" y="104" width="288" height="48" rx="24" ry="24" fill="#@LIGHT@"/>
+    <rect x="80" y="200" width="208" height="48" rx="24" ry="24" fill="#@ACCENT@"/>
+    <rect x="80" y="296" width="288" height="48" rx="24" ry="24" fill="#@LIGHT@"/>
+  </g>
+  <text x="112" y="60" font-family="DejaVu Sans, sans-serif" font-size="32" font-weight="bold" fill="#@LIGHT@">@NAME@</text>
+  <rect x="0" y="92" width="800" height="4" fill="#@ACCENT@"/>
+</svg>

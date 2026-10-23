@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- @NAME@ panel menu icon: three equal bars on a dark tile. Tokens are
+     substituted by scripts/render.sh. Designed to stay legible at 16px. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="@NAME@ menu">
+  <title>@NAME@ panel menu</title>
+  <rect x="0" y="0" width="512" height="512" rx="88" ry="88" fill="#@DARK2@"/>
+  <rect x="104" y="120" width="304" height="56" rx="28" ry="28" fill="#@LIGHT@"/>
+  <rect x="104" y="228" width="304" height="56" rx="28" ry="28" fill="#@LIGHT@"/>
+  <rect x="104" y="336" width="304" height="56" rx="28" ry="28" fill="#@ACCENT@"/>
+</svg>

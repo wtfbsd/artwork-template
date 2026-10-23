@@ -1,0 +1,17 @@
+# @NAME@ xfwm4 title colors snippet.
+#
+# Install as ~/.themes/@NAME@/xfwm4/themerc (or copy button art from a base
+# theme into that directory) and select the theme in xfwm4-settings.
+# All colors come from palette.env; re-render instead of editing by hand.
+
+# Active window
+active_color_1=#@PRIMARY@
+active_text_color=#@LIGHT@
+active_border_color=#@PRIMARY@
+active_mid_title_color=#@DARK@
+
+# Inactive window
+inactive_color_1=#@DARK2@
+inactive_text_color=#@MUTED@
+inactive_border_color=#@DARK@
+inactive_mid_title_color=#@DARK@
