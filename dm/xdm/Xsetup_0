@@ -1,0 +1,25 @@
+#!/bin/sh
+# @NAME@ xdm setup: runs before the login box appears. Paints the root
+# window with the greeter background (identity line stamped lower left)
+# when an image setter is installed, otherwise with the palette colour.
+BG=@SHARE_DIR@/lightdm/greeter-1920x1080.png
+painted=no
+if [ -r "$BG" ]; then
+	for setter in /usr/local/bin/xwallpaper /usr/pkg/bin/xwallpaper; do
+		if [ -x "$setter" ]; then
+			"$setter" --zoom "$BG" && painted=yes
+			break
+		fi
+	done
+	if [ "$painted" = no ]; then
+		for setter in /usr/local/bin/feh /usr/pkg/bin/feh; do
+			if [ -x "$setter" ]; then
+				"$setter" --no-fehbg --bg-fill "$BG" && painted=yes
+				break
+			fi
+		done
+	fi
+fi
+[ "$painted" = yes ] || xsetroot -solid '#@DARK@'
+# Keep the console messages window if your xdm setup used one:
+# xconsole -geometry 480x130-0-0 -daemon -notify -verbose -fn fixed -exitOnFail

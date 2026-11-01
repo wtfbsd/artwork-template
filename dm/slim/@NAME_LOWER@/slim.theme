@@ -1,0 +1,42 @@
+# @NAME@ SLiM theme. Install this directory (slim.theme, background.png,
+# panel.png) as /usr/pkg/share/slim/themes/@NAME_LOWER@/ and select it with
+# "current_theme @NAME_LOWER@" in /usr/pkg/etc/slim.conf.
+# Colours come from palette.env; re-render instead of editing by hand.
+
+background_style	stretch
+background_color	#@DARK@
+
+input_panel_x		50%
+input_panel_y		50%
+input_name_x		52
+input_name_y		152
+input_pass_x		52
+input_pass_y		230
+input_font		@FONT@:size=13
+input_color		#@LIGHT@
+
+# The identity line, live, under the name on the panel. SLiM places the
+# welcome text relative to the panel, not the screen; the lower-left copy
+# is stamped on background.png.
+show_welcome_msg	1
+welcome_msg		@IDENTITY_ASCII@
+welcome_font		@FONT@:size=10
+welcome_color		#@IDENTITY_FG@
+welcome_x		40
+welcome_y		112
+
+# The panel draws its own field labels; -1 hides SLiM's prompts.
+username_x		-1
+username_y		-1
+password_x		-1
+password_y		-1
+
+msg_color		#@LIGHT@
+msg_font		@FONT@:size=14:bold
+msg_x			50%
+msg_y			70%
+
+session_color		#@MUTED@
+session_font		@FONT@:size=12
+session_x		50%
+session_y		90%

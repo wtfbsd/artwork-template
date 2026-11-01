@@ -1,0 +1,3 @@
+# @NAME@ loader branding for illumos. Append to /boot/loader.conf.
+loader_brand="@NAME_LOWER@"
+loader_logo="@NAME_LOWER@"

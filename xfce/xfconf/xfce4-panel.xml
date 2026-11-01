@@ -2,7 +2,7 @@
 
 <!--
   @NAME@ single bottom Xfce panel.
-  Install under ~/.config/xfce4/xfconf/xfce4-perchannel-xml/ (or seed via
+  Install under ~/.config/xfce4/xfconf/xfce-perchannel-xml/ (or seed via
   your packaging/first-boot tooling).
 -->
 

@@ -1,0 +1,47 @@
+/* @NAME@ LightDM greeter theme (@VARIANT_LABEL@ variant).
+ *
+ * Install as <prefix>/share/themes/@NAME_LOWER@-greeter/gtk-3.0/gtk.css and
+ * set theme-name=@NAME_LOWER@-greeter in lightdm-gtk-greeter.conf. It starts
+ * from GTK's built-in dark Adwaita and recolours it from palette.env.
+ */
+@import url("resource:///org/gtk/libgtk/theme/Adwaita/gtk-contained-dark.css");
+
+@define-color theme_bg_color #@DARK2@; /* NOSONAR -- GTK CSS @define-color */
+@define-color theme_fg_color #@LIGHT@; /* NOSONAR -- GTK CSS @define-color */
+@define-color theme_base_color #@DARK@; /* NOSONAR -- GTK CSS @define-color */
+@define-color theme_text_color #@LIGHT@; /* NOSONAR -- GTK CSS @define-color */
+@define-color theme_selected_bg_color #@PRIMARY@; /* NOSONAR -- GTK CSS @define-color */
+@define-color theme_selected_fg_color #@LIGHT@; /* NOSONAR -- GTK CSS @define-color */
+
+#login_window,
+#panel_window {
+	background-color: alpha(#@DARK2@, 0.92);
+	color: #@LIGHT@;
+	font-family: "@FONT@";
+}
+
+#login_window {
+	border: 1px solid alpha(#@ACCENT@, 0.6);
+	border-radius: 10px;
+}
+
+#login_window entry { /* NOSONAR -- GTK CSS: "entry" is the GtkEntry node name, not an HTML element */
+	background-color: #@DARK@;
+	color: #@LIGHT@;
+	border-color: alpha(#@MUTED@, 0.5);
+}
+
+#login_window entry:focus { /* NOSONAR -- GTK CSS: "entry" is the GtkEntry node name */
+	border-color: #@ACCENT@;
+}
+
+#login_window button.default,
+#login_window #login_button {
+	background-image: none;
+	background-color: #@PRIMARY@;
+	color: #@LIGHT@;
+}
+
+#panel_window {
+	color: #@MUTED@;
+}

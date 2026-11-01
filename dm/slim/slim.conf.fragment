@@ -1,0 +1,2 @@
+# @NAME@: select the theme in /usr/pkg/etc/slim.conf.
+current_theme @NAME_LOWER@

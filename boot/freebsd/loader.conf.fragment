@@ -1,0 +1,9 @@
+# @NAME@ loader branding. Append to /boot/loader.conf.
+loader_brand="@NAME_LOWER@"
+loader_logo="@NAME_LOWER@"
+loader_menu_title="Welcome to @NAME@"
+# vt(4) boot splash: 8-bit RGBA PNG (out/loader/splash.png). It is shown
+# while booting only with boot_mute="YES", which hides the kernel messages.
+splash="/boot/images/@NAME_LOWER@-splash.png"
+shutdown_splash="/boot/images/@NAME_LOWER@-splash.png"
+#boot_mute="YES"
