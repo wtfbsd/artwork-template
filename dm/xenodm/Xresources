@@ -1,0 +1,78 @@
+! @NAME@ login box for xenodm. Replaces /etc/X11/xenodm/Xresources on OpenBSD; the pixmaps go in /etc/X11/xenodm/pixmaps/.
+!
+! xrdb runs this file through cpp, so #if works and CLIENTHOST would expand
+! to the host name. render.sh adds an #undef for every word of the greeting
+! so that no word in it can be taken for a predefined cpp macro.
+! Colours come from palette.env; re-render instead of editing by hand.
+
+xlogin*login.translations: #override \
+	<Key>F1: set-session-argument(failsafe) finish-field()\n\
+	<Key>Left: move-backward-character()\n\
+	<Key>Right: move-forward-character()\n\
+	<Key>Home: move-to-begining()\n\
+	<Key>End: move-to-end()\n\
+	Ctrl<Key>KP_Enter: set-session-argument(failsafe) finish-field()\n\
+	<Key>KP_Enter: set-session-argument() finish-field()\n\
+	Ctrl<Key>Return: set-session-argument(failsafe) finish-field()\n\
+	<Key>Return: set-session-argument() finish-field()
+
+xlogin*greeting: @IDENTITY_ASCII@
+xlogin*namePrompt: \040\040\040\040\040\040\040Login:
+xlogin*fail: Login incorrect or forbidden
+
+#if WIDTH > 800
+xlogin*greetFace:	@FONT@-18:bold:dpi=75
+xlogin*face:		@FONT@-16:dpi=75
+xlogin*promptFace:	@FONT@-16:bold:dpi=75
+xlogin*failFace:	@FONT@-16:bold:dpi=75
+#else
+xlogin*greetFace:	@FONT@-14:bold:dpi=75
+xlogin*face:		@FONT@-12:dpi=75
+xlogin*promptFace:	@FONT@-12:bold:dpi=75
+xlogin*failFace:	@FONT@-12:bold:dpi=75
+#endif
+
+#if PLANES >= 8
+xlogin*borderWidth: 1
+xlogin*frameWidth: 2
+xlogin*innerFramesWidth: 0
+xlogin.Login.sepWidth: 0
+xlogin*hiColor: #@PRIMARY@
+xlogin*shdColor: #@ACCENT@
+xlogin*greetColor: #@IDENTITY_FG@
+xlogin*background: #@DARK2@
+xlogin*inpColor: #@DARK@
+xlogin*failColor: #@HIGHLIGHT@
+xlogin*promptColor: #@LIGHT@
+*Foreground: #@LIGHT@
+*Background: #@DARK@
+# if PLANES > 8
+xlogin*logoFileName: /etc/X11/xenodm/pixmaps/@NAME_LOWER@-color.xpm
+# else
+xlogin*logoFileName: /etc/X11/xenodm/pixmaps/@NAME_LOWER@-8bpp.xpm
+# endif
+#else
+xlogin*borderWidth: 3
+xlogin*frameWidth: 5
+xlogin*innerFramesWidth: 1
+xlogin*shdColor: white
+xlogin*hiColor: white
+xlogin*greetColor: white
+xlogin*background: black
+xlogin*failColor: white
+xlogin*promptColor: white
+*Foreground: white
+*Background: black
+xlogin*logoFileName: /etc/X11/xenodm/pixmaps/@NAME_LOWER@-1bpp.xpm
+#endif
+xlogin*useShape: true
+xlogin*logoPadding: 10
+
+XConsole*background:	#@DARK@
+XConsole*foreground:	#@LIGHT@
+XConsole*borderWidth:	2
+XConsole*borderColor:	#@DARK2@
+XConsole.text.geometry:	480x130
+XConsole.verbose:	true
+XConsole*iconic:	true
+XConsole*font:		fixed

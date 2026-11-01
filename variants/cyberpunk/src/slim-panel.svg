@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- @NAME@ SLiM input panel, 600x280. Cyberpunk variant. Tokens are substituted by
+     scripts/render.sh. -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 600 280" width="600" height="280">
+  <title>@NAME@ login panel</title>
+  <defs>
+    <g id="cpmark">
+      <rect x="9" y="9" width="430" height="430" rx="64" ry="64" fill="#@DARK2@" stroke="#@PRIMARY@" stroke-width="18"/>
+      <g opacity="0.8">
+        <rect x="66" y="104" width="288" height="48" rx="4" fill="#@PRIMARY@"/>
+        <rect x="94" y="296" width="288" height="48" rx="4" fill="#@ACCENT@"/>
+      </g>
+      <rect x="80" y="104" width="288" height="48" rx="4" fill="#@LIGHT@"/>
+      <rect x="108" y="200" width="208" height="48" rx="4" fill="#@ACCENT@"/>
+      <rect x="80" y="214" width="60" height="20" fill="#@PRIMARY@"/>
+      <rect x="80" y="296" width="288" height="48" rx="4" fill="#@LIGHT@"/>
+      <rect x="372" y="66" width="22" height="22" fill="#@HIGHLIGHT@"/>
+      <rect x="54" y="370" width="14" height="14" fill="#@HIGHLIGHT@"/>
+    </g>
+  </defs>
+  <rect x="3" y="3" width="594" height="274" rx="6" ry="6" fill="#@DARK2@" stroke="#@PRIMARY@" stroke-width="3"/>
+  <rect x="0" y="0" width="600" height="6" fill="#@ACCENT@"/>
+  <use xlink:href="#cpmark" transform="translate(40,34) scale(0.125000)"/>
+  <defs>
+    <clipPath id="slice"><rect x="-4000" y="66.5" width="12000" height="4.2"/></clipPath>
+  </defs>
+  <g font-family="DejaVu Sans Mono, monospace" font-size="28" font-weight="bold" text-anchor="start">
+    <text x="110" y="76" fill="#@PRIMARY@" fill-opacity="0.9">@NAME@</text>
+    <text x="114" y="76" fill="#@ACCENT@" fill-opacity="0.9">@NAME@</text>
+    <text x="112" y="76" fill="#@LIGHT@">@NAME@</text>
+    <g clip-path="url(#slice)">
+      <text x="115" y="76" fill="#@ACCENT@">@NAME@</text>
+    </g>
+  </g>
+  <text x="40" y="136" font-family="DejaVu Sans Mono, monospace" font-size="14" fill="#@ACCENT@">USER</text>
+  <rect x="40" y="144" width="520" height="40" rx="2" fill="#@DARK@" stroke="#@ACCENT@" stroke-opacity="0.6"/>
+  <text x="40" y="214" font-family="DejaVu Sans Mono, monospace" font-size="14" fill="#@ACCENT@">PASSWORD</text>
+  <rect x="40" y="222" width="520" height="40" rx="2" fill="#@DARK@" stroke="#@ACCENT@" stroke-opacity="0.6"/>
+</svg>

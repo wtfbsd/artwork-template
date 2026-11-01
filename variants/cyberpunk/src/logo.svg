@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- @NAME@ logo mark, 512x512. Cyberpunk variant. Tokens are substituted by
+     scripts/render.sh. -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" width="512" height="512">
+  <title>@NAME@ mark</title>
+  <defs>
+    <g id="cpmark">
+      <rect x="9" y="9" width="430" height="430" rx="64" ry="64" fill="#@DARK2@" stroke="#@PRIMARY@" stroke-width="18"/>
+      <g opacity="0.8">
+        <rect x="66" y="104" width="288" height="48" rx="4" fill="#@PRIMARY@"/>
+        <rect x="94" y="296" width="288" height="48" rx="4" fill="#@ACCENT@"/>
+      </g>
+      <rect x="80" y="104" width="288" height="48" rx="4" fill="#@LIGHT@"/>
+      <rect x="108" y="200" width="208" height="48" rx="4" fill="#@ACCENT@"/>
+      <rect x="80" y="214" width="60" height="20" fill="#@PRIMARY@"/>
+      <rect x="80" y="296" width="288" height="48" rx="4" fill="#@LIGHT@"/>
+      <rect x="372" y="66" width="22" height="22" fill="#@HIGHLIGHT@"/>
+      <rect x="54" y="370" width="14" height="14" fill="#@HIGHLIGHT@"/>
+    </g>
+  </defs>
+  <use xlink:href="#cpmark" transform="translate(32,32) scale(1.000000)"/>
+</svg>

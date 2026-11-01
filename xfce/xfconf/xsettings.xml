@@ -2,7 +2,7 @@
 
 <!--
   @NAME@ xsettings defaults.
-  Install under ~/.config/xfce4/xfconf/xfce4-perchannel-xml/ (or seed via
+  Install under ~/.config/xfce4/xfconf/xfce-perchannel-xml/ (or seed via
   your packaging/first-boot tooling). IconThemeName is left at "hicolor" so
   the @NAME_LOWER@ icons installed into share/icons/hicolor always resolve.
 -->
@@ -12,6 +12,6 @@
     <property name="IconThemeName" type="string" value="hicolor"/>
   </property>
   <property name="Gtk" type="empty">
-    <property name="FontName" type="string" value="DejaVu Sans 10"/>
+    <property name="FontName" type="string" value="@FONT@ 10"/>
   </property>
 </channel>

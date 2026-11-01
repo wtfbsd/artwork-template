@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- @NAME@ wallpaper 3: dark, faint grid, small wordmark lower right. Cyberpunk variant. Tokens are substituted by
+     scripts/render.sh. -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1920 1080" width="1920" height="1080" preserveAspectRatio="xMidYMid slice">
+  <title>@NAME@ wallpaper 3</title>
+  <defs>
+    <g id="cpmark">
+      <rect x="9" y="9" width="430" height="430" rx="64" ry="64" fill="#@DARK2@" stroke="#@PRIMARY@" stroke-width="18"/>
+      <g opacity="0.8">
+        <rect x="66" y="104" width="288" height="48" rx="4" fill="#@PRIMARY@"/>
+        <rect x="94" y="296" width="288" height="48" rx="4" fill="#@ACCENT@"/>
+      </g>
+      <rect x="80" y="104" width="288" height="48" rx="4" fill="#@LIGHT@"/>
+      <rect x="108" y="200" width="208" height="48" rx="4" fill="#@ACCENT@"/>
+      <rect x="80" y="214" width="60" height="20" fill="#@PRIMARY@"/>
+      <rect x="80" y="296" width="288" height="48" rx="4" fill="#@LIGHT@"/>
+      <rect x="372" y="66" width="22" height="22" fill="#@HIGHLIGHT@"/>
+      <rect x="54" y="370" width="14" height="14" fill="#@HIGHLIGHT@"/>
+    </g>
+    <pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse">
+      <rect x="0" y="0" width="4" height="1" fill="#000000" fill-opacity="0.28"/>
+    </pattern>
+  </defs>
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#@DARK@"/><stop offset="1" stop-color="#@DARK2@"/></linearGradient></defs>
+  <rect x="0" y="0" width="1920" height="1080" fill="url(#bg)"/>
+  <defs>
+    <clipPath id="w3grid-clip"><rect x="0" y="620" width="1920" height="460"/></clipPath>
+  </defs>
+  <g clip-path="url(#w3grid-clip)" stroke="#@ACCENT@" stroke-opacity="0.14" stroke-width="2" fill="none">
+      <line x1="0" y1="623.2" x2="1920" y2="623.2"/>
+      <line x1="0" y1="632.8" x2="1920" y2="632.8"/>
+      <line x1="0" y1="648.8" x2="1920" y2="648.8"/>
+      <line x1="0" y1="671.1" x2="1920" y2="671.1"/>
+      <line x1="0" y1="699.9" x2="1920" y2="699.9"/>
+      <line x1="0" y1="735.0" x2="1920" y2="735.0"/>
+      <line x1="0" y1="776.5" x2="1920" y2="776.5"/>
+      <line x1="0" y1="824.4" x2="1920" y2="824.4"/>
+      <line x1="0" y1="878.8" x2="1920" y2="878.8"/>
+      <line x1="0" y1="939.4" x2="1920" y2="939.4"/>
+      <line x1="0" y1="1006.5" x2="1920" y2="1006.5"/>
+      <line x1="0" y1="1080.0" x2="1920" y2="1080.0"/>
+      <line x1="640.0" y1="620" x2="-2112.0" y2="1080"/>
+      <line x1="657.8" y1="620" x2="-1941.3" y2="1080"/>
+      <line x1="675.6" y1="620" x2="-1770.7" y2="1080"/>
+      <line x1="693.3" y1="620" x2="-1600.0" y2="1080"/>
+      <line x1="711.1" y1="620" x2="-1429.3" y2="1080"/>
+      <line x1="728.9" y1="620" x2="-1258.7" y2="1080"/>
+      <line x1="746.7" y1="620" x2="-1088.0" y2="1080"/>
+      <line x1="764.4" y1="620" x2="-917.3" y2="1080"/>
+      <line x1="782.2" y1="620" x2="-746.7" y2="1080"/>
+      <line x1="800.0" y1="620" x2="-576.0" y2="1080"/>
+      <line x1="817.8" y1="620" x2="-405.3" y2="1080"/>
+      <line x1="835.6" y1="620" x2="-234.7" y2="1080"/>
+      <line x1="853.3" y1="620" x2="-64.0" y2="1080"/>
+      <line x1="871.1" y1="620" x2="106.7" y2="1080"/>
+      <line x1="888.9" y1="620" x2="277.3" y2="1080"/>
+      <line x1="906.7" y1="620" x2="448.0" y2="1080"/>
+      <line x1="924.4" y1="620" x2="618.7" y2="1080"/>
+      <line x1="942.2" y1="620" x2="789.3" y2="1080"/>
+      <line x1="960.0" y1="620" x2="960.0" y2="1080"/>
+      <line x1="977.8" y1="620" x2="1130.7" y2="1080"/>
+      <line x1="995.6" y1="620" x2="1301.3" y2="1080"/>
+      <line x1="1013.3" y1="620" x2="1472.0" y2="1080"/>
+      <line x1="1031.1" y1="620" x2="1642.7" y2="1080"/>
+      <line x1="1048.9" y1="620" x2="1813.3" y2="1080"/>
+      <line x1="1066.7" y1="620" x2="1984.0" y2="1080"/>
+      <line x1="1084.4" y1="620" x2="2154.7" y2="1080"/>
+      <line x1="1102.2" y1="620" x2="2325.3" y2="1080"/>
+      <line x1="1120.0" y1="620" x2="2496.0" y2="1080"/>
+      <line x1="1137.8" y1="620" x2="2666.7" y2="1080"/>
+      <line x1="1155.6" y1="620" x2="2837.3" y2="1080"/>
+      <line x1="1173.3" y1="620" x2="3008.0" y2="1080"/>
+      <line x1="1191.1" y1="620" x2="3178.7" y2="1080"/>
+      <line x1="1208.9" y1="620" x2="3349.3" y2="1080"/>
+      <line x1="1226.7" y1="620" x2="3520.0" y2="1080"/>
+      <line x1="1244.4" y1="620" x2="3690.7" y2="1080"/>
+      <line x1="1262.2" y1="620" x2="3861.3" y2="1080"/>
+      <line x1="1280.0" y1="620" x2="4032.0" y2="1080"/>
+  </g>
+  <rect x="0" y="619" width="1920" height="3" fill="#@ACCENT@" fill-opacity="0.7"/>
+  <use xlink:href="#cpmark" transform="translate(1700,960) scale(0.125000)"/>
+  <defs>
+    <clipPath id="slice"><rect x="-4000" y="993.8" width="12000" height="4.5"/></clipPath>
+  </defs>
+  <g font-family="DejaVu Sans Mono, monospace" font-size="30" font-weight="bold" text-anchor="end">
+    <text x="1678" y="1004" fill="#@PRIMARY@" fill-opacity="0.9">@NAME@</text>
+    <text x="1682" y="1004" fill="#@ACCENT@" fill-opacity="0.9">@NAME@</text>
+    <text x="1680" y="1004" fill="#@LIGHT@">@NAME@</text>
+    <g clip-path="url(#slice)">
+      <text x="1683" y="1004" fill="#@ACCENT@">@NAME@</text>
+    </g>
+  </g>
+  <rect x="0" y="0" width="1920" height="1080" fill="url(#scan)"/>
+</svg>

@@ -1,7 +1,7 @@
 /* @NAME@ GTK3 color overrides.
  *
  * Usage: import from ~/.config/gtk-3.0/gtk.css (or a packaged theme), e.g.
- *   @import url("/usr/local/share/@NAME_LOWER@/xfce/gtk-colors.css");
+ *   @import url("@SHARE_DIR@/xfce/gtk-colors.css");
  *
  * All colors come from the palette; edit palette.env and re-render instead
  * of editing this file by hand.

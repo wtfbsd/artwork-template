@@ -122,7 +122,8 @@ for f in xfce/gtk-colors.css xfce/xfwm4-themerc \
 done
 
 # ----------------------------------------------------- token-substitution
-if grep -rInE '@[A-Z0-9_]+@' "$RENDER_OUT" > "$TMPD/tokens.out" 2>/dev/null; then
+# XPM pixel codes may contain any printable run, so XPMs are skipped.
+if find "$RENDER_OUT" -type f ! -name '*.xpm' ! -name '*.png' ! -name '*.ico' -exec grep -nE '@[A-Z0-9_]+@' {} + > "$TMPD/tokens.out" 2>/dev/null; then
 	fail 'unsubstituted @TOKEN@ left in out/ text files:'
 	sed 's/^/    /' "$TMPD/tokens.out" >&2
 else
@@ -132,7 +133,9 @@ fi
 # -------------------------------------------------------------- rebrand run
 CPY="$TMPD/copy"
 mkdir -p "$CPY"
-cp -R "$ROOT/palette.env" "$ROOT/src" "$ROOT/scripts" "$ROOT/xfce" "$ROOT/lightdm" "$ROOT/xinit" "$CPY/"
+for _d in palette.env src scripts variants xfce lightdm xinit dm console boot; do
+	[ -e "$ROOT/$_d" ] && cp -R "$ROOT/$_d" "$CPY/"
+done
 rm -rf "$CPY/out"
 
 _BEFORE=$(find "$CPY/src" -type f -exec cksum {} + | sort)

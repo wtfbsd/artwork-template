@@ -1,0 +1,14 @@
+# @NAME@ menu entries for the DragonFly loader. The loader has no logo
+# files (its ASCII art is compiled in); branding is the menu text. Copy
+# /boot/defaults/dloader.menu to /boot/dloader.menu and replace its
+# "menuitem" titles with these, keeping each item's "menuadd" lines.
+menuitem 1 "Boot @NAME@ [${default_kernel}]"
+menuitem 2 "Boot @NAME@ in Safe Mode"
+menuitem 3 "Boot @NAME@ without AHCI driver"
+menuitem 4 "Boot @NAME@ without ACPI driver"
+menuitem o "Boot @NAME@ using kernel.old"
+menuitem r "Boot @NAME@ to a rescue ramdisk"
+menuitem s "Boot @NAME@ in single user mode"
+menuitem v "Boot @NAME@ with verbose logging"
+# Hide the compiled-in ASCII art (append to /boot/loader.conf):
+#   fred_disable="YES"

@@ -1,0 +1,4 @@
+# @NAME@ login banner for getty. Replace the im= capability of the
+# "default" entry in /etc/gettytab (FreeBSD, NetBSD, OpenBSD, DragonFly);
+# %h is the host name and %t the terminal.
+	:im=\r\n@NAME@ (%h) (%t)\r\n\r\n:

@@ -2,9 +2,9 @@
 
 <!--
   @NAME@ xfdesktop defaults.
-  Install under ~/.config/xfce4/xfconf/xfce4-perchannel-xml/ (or seed via
+  Install under ~/.config/xfce4/xfconf/xfce-perchannel-xml/ (or seed via
   your packaging/first-boot tooling). Wallpaper path follows the
-  /usr/local/share/@NAME_LOWER@/ layout; adjust for other prefixes.
+  @SHARE_DIR@ layout (render.sh --share-dir changes it).
 -->
 
 <channel name="xfce4-desktop" version="1.0">
@@ -12,13 +12,13 @@
     <property name="screen0" type="empty">
       <property name="monitor0" type="empty">
         <property name="workspace0" type="empty">
-          <property name="last-image" type="string" value="/usr/local/share/@NAME_LOWER@/wallpapers/wallpaper-1-1920x1080.png"/>
+          <property name="last-image" type="string" value="@SHARE_DIR@/wallpapers/wallpaper-1-1920x1080.png"/>
           <property name="image-style" type="uint" value="5"/>
         </property>
       </property>
       <property name="monitorVirtual-1" type="empty">
         <property name="workspace0" type="empty">
-          <property name="last-image" type="string" value="/usr/local/share/@NAME_LOWER@/wallpapers/wallpaper-1-1920x1080.png"/>
+          <property name="last-image" type="string" value="@SHARE_DIR@/wallpapers/wallpaper-1-1920x1080.png"/>
           <property name="image-style" type="uint" value="5"/>
         </property>
       </property>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- @NAME@ SLiM input panel, 600x280. SLiM draws the typed user name and
+     password over the two fields (input_name_x/y, input_pass_x/y in
+     slim.theme are relative to this panel). Tokens are substituted by
+     scripts/render.sh. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 280" width="600" height="280">
+  <title>@NAME@ login panel</title>
+  <rect x="0" y="0" width="600" height="280" rx="18" ry="18" fill="#@DARK2@"/>
+  <rect x="0" y="0" width="600" height="6" fill="#@ACCENT@"/>
+  <g transform="translate(40,34) scale(0.125)">
+    <rect x="0" y="0" width="448" height="448" rx="104" ry="104" fill="#@PRIMARY@"/>
+    <rect x="80" y="104" width="288" height="48" rx="24" ry="24" fill="#@LIGHT@"/>
+    <rect x="80" y="200" width="208" height="48" rx="24" ry="24" fill="#@ACCENT@"/>
+    <rect x="80" y="296" width="288" height="48" rx="24" ry="24" fill="#@LIGHT@"/>
+  </g>
+  <text x="112" y="76" font-family="DejaVu Sans, sans-serif" font-size="30" font-weight="bold" fill="#@LIGHT@">@NAME@</text>
+  <text x="40" y="136" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#@MUTED@">User name</text>
+  <rect x="40" y="144" width="520" height="40" rx="6" ry="6" fill="#@DARK@" stroke="#@MUTED@" stroke-opacity="0.5"/>
+  <text x="40" y="214" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#@MUTED@">Password</text>
+  <rect x="40" y="222" width="520" height="40" rx="6" ry="6" fill="#@DARK@" stroke="#@MUTED@" stroke-opacity="0.5"/>
+</svg>

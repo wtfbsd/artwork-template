@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- @NAME@ loader mark and name, 480x200. Cyberpunk variant. Tokens are substituted by
+     scripts/render.sh. -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 480 200" width="480" height="200">
+  <title>@NAME@ loader logo</title>
+  <defs>
+    <g id="cpmark">
+      <rect x="9" y="9" width="430" height="430" rx="64" ry="64" fill="#@DARK2@" stroke="#@PRIMARY@" stroke-width="18"/>
+      <g opacity="0.8">
+        <rect x="66" y="104" width="288" height="48" rx="4" fill="#@PRIMARY@"/>
+        <rect x="94" y="296" width="288" height="48" rx="4" fill="#@ACCENT@"/>
+      </g>
+      <rect x="80" y="104" width="288" height="48" rx="4" fill="#@LIGHT@"/>
+      <rect x="108" y="200" width="208" height="48" rx="4" fill="#@ACCENT@"/>
+      <rect x="80" y="214" width="60" height="20" fill="#@PRIMARY@"/>
+      <rect x="80" y="296" width="288" height="48" rx="4" fill="#@LIGHT@"/>
+      <rect x="372" y="66" width="22" height="22" fill="#@HIGHLIGHT@"/>
+      <rect x="54" y="370" width="14" height="14" fill="#@HIGHLIGHT@"/>
+    </g>
+    <pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse">
+      <rect x="0" y="0" width="4" height="1" fill="#000000" fill-opacity="0.28"/>
+    </pattern>
+  </defs>
+  <rect x="0" y="0" width="480" height="200" fill="#@DARK@"/>
+  <use xlink:href="#cpmark" transform="translate(28,32) scale(0.303571)"/>
+  <defs>
+    <clipPath id="slice"><rect x="-4000" y="99.1" width="12000" height="5.7"/></clipPath>
+  </defs>
+  <g font-family="DejaVu Sans Mono, monospace" font-size="38" font-weight="bold" text-anchor="start">
+    <text x="182" y="112" fill="#@PRIMARY@" fill-opacity="0.9">@NAME@</text>
+    <text x="186" y="112" fill="#@ACCENT@" fill-opacity="0.9">@NAME@</text>
+    <text x="184" y="112" fill="#@LIGHT@">@NAME@</text>
+    <g clip-path="url(#slice)">
+      <text x="187" y="112" fill="#@ACCENT@">@NAME@</text>
+    </g>
+  </g>
+  <rect x="0" y="0" width="480" height="200" fill="url(#scan)"/>
+</svg>
