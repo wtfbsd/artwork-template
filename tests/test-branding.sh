@@ -361,7 +361,10 @@ if [ -f "$STAMP" ] && [ -f "$TMPD/identity" ]; then
 		_x=$(printf '%s' "$G" | sed -E 's/.*x[0-9]+\+([0-9]+)\+.*/\1/')
 		_y=$(printf '%s' "$G" | sed -E 's/.*\+([0-9]+)$/\1/')
 		_h=$(printf '%s' "$G" | sed -E 's/^[0-9]+x([0-9]+).*/\1/')
-		[ "$_x" -le 64 ] && [ $((_y + _h)) -ge 1000 ] && ok "$v stamp is lower left ($G)" || fail "$v stamp is not lower left ($G)"
+		# Lower left of the 5:4 safe area of a 1920x1080 image (x 285..1635);
+		# test-crop.sh checks the crops themselves.
+		[ "$_x" -ge 285 ] && [ "$_x" -le 349 ] && [ $((_y + _h)) -ge 1000 ] && ok "$v stamp is lower left of the safe area ($G)" ||
+			fail "$v stamp is not lower left of the safe area ($G)"
 		if [ "$PLATE" = 0 ]; then
 			C=$(worst_contrast "$IN" "$G" "$FG")
 		else

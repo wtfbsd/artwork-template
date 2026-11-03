@@ -5,11 +5,21 @@
   Install under ~/.config/xfce4/xfconf/xfce-perchannel-xml/ (or seed via
   your packaging/first-boot tooling). Wallpaper path follows the
   @SHARE_DIR@ layout (render.sh --share-dir changes it).
+
+  xfdesktop keys the wallpaper by output name: "default" is the output of
+  the scfb and vesa drivers. Outputs not listed here (eDP-1, HDMI-A-1, ...)
+  get it from xfce/session/@NAME_LOWER@-wallpaper.sh at login.
 -->
 
 <channel name="xfce4-desktop" version="1.0">
   <property name="backdrop" type="empty">
     <property name="screen0" type="empty">
+      <property name="monitordefault" type="empty">
+        <property name="workspace0" type="empty">
+          <property name="last-image" type="string" value="@SHARE_DIR@/wallpapers/wallpaper-1-1920x1080.png"/>
+          <property name="image-style" type="uint" value="5"/>
+        </property>
+      </property>
       <property name="monitor0" type="empty">
         <property name="workspace0" type="empty">
           <property name="last-image" type="string" value="@SHARE_DIR@/wallpapers/wallpaper-1-1920x1080.png"/>

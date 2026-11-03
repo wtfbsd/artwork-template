@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=@NAME@ wallpaper
+Comment=Set the @NAME@ wallpaper on every display output
+Exec=/bin/sh @SHARE_DIR@/xfce/session/@NAME_LOWER@-wallpaper.sh
+OnlyShowIn=XFCE;
+NoDisplay=true
+Terminal=false
