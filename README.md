@@ -110,8 +110,9 @@ Templates use these as `@NAME@`, `@PRIMARY@` and so on. `render.sh` also
 provides `@VARIANT@`, `@VARIANT_LABEL@`, `@SHARE_DIR@` (the install
 directory, `/usr/local/share/<slug>` unless `--share-dir` says otherwise),
 `@IDENTITY_LINE@` and `@IDENTITY_ASCII@`. A file name containing
-`@NAME_LOWER@` is renamed with the slug. Nothing in `src/` or the config
-templates names the product or its colours directly.
+`@NAME_LOWER@` is renamed with the slug, and the token itself expands to
+`<slug>`. Nothing in `src/` or the config templates names the product or
+its colours directly.
 
 ## Rebranding
 
@@ -140,9 +141,21 @@ out/
 ├── wallpapers/  wallpaper-N-1920x1080.png, wallpaper-N-3840x2160.png (N=1..3)
 ├── icons/       hicolor/{sizes}/apps/<slug>-{logo,installer,menu}.png + scalable/
 ├── favicon/     favicon-{16,32,48,180,192,512}.png, favicon.svg, favicon.ico
-├── xfce/        gtk-colors.css, xfwm4-themerc, xfconf/*.xml
+├── xfce/        gtk-colors.css, xfwm4-themerc, xfconf/*.xml, autostart/,
+│                session/
 └── xinit/       xinitrc.example
 ```
+
+`xfce/autostart/*.desktop` installs to `/etc/xdg/autostart/`.
+`xfce/session/*.sh` installs to the share directory the autostart `Exec`
+line names: `/usr/local/share/<slug>/xfce/session/`. In the templates
+`@SHARE_DIR@` expands to `/usr/local/share/<slug>` and `@NAME_LOWER@` to
+the product slug (`<slug>`); the session helper is installed root-owned,
+mode 0755.
+
+The session helper `xfce/session/<slug>-wallpaper.sh` fills in the packaged
+wallpaper on every display output that has no wallpaper yet; an output whose
+wallpaper the person chose is left alone.
 
 The loader brand, logo and splash are 8-bit RGBA PNGs: FreeBSD's vt(4) draws
 only RGBA splashes.

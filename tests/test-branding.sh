@@ -320,6 +320,85 @@ for line in sys.stdin:
 print("%.2f" % (worst or 0))' "$3"
 }
 kv() { printf '%s\n' "$1" | tr ' ' '\n' | sed -n "s/^$2=//p"; }
+box_inside() {
+	# box_inside BOX RECT : true when BOX (WxH+X+Y) lies inside RECT
+	# (WxH+X+Y). Both are parsed here, not taken from the script's report.
+	awk -v b="$1" -v r="$2" 'BEGIN {
+		if (split(b, p, /[x+]/) != 4 || split(r, q, /[x+]/) != 4) exit 1
+		exit !(p[3] >= q[3] && p[4] >= q[4] && p[3] + p[1] <= q[3] + q[1] && p[4] + p[2] <= q[4] + q[2])
+	}'
+}
+box_x() { printf '%s\n' "$1" | sed -E 's/^[0-9]+x[0-9]+\+([0-9]+)\+.*/\1/'; }
+box_y() { printf '%s\n' "$1" | sed -E 's/^[0-9]+x[0-9]+\+[0-9]+\+([0-9]+)$/\1/'; }
+box_w() { printf '%s\n' "$1" | sed -E 's/^([0-9]+)x.*/\1/'; }
+box_h() { printf '%s\n' "$1" | sed -E 's/^[0-9]+x([0-9]+).*/\1/'; }
+safe_rect() {
+	# safe_rect W H : the safe area of a W x H image, computed here from
+	# the crop geometry alone: the part of the image every screen of 5:4,
+	# 4:3 or 16:9 shows, that is the intersection of the centred crops.
+	# The origin rounds up, as scripts/identity-stamp.sh does it.
+	awk -v W="$1" -v H="$2" 'BEGIN {
+		sx = 0; sy = 0; sr = W; sb = H
+		n = split("5:4 4:3 16:9", r, " ")
+		for (i = 1; i <= n; i++) {
+			split(r[i], q, ":")
+			a = q[1]; b = q[2]
+			if (W * b > H * a) {
+				cw = int(H * a / b)
+				x0 = int((W - cw + 1) / 2)
+				if (x0 > sx) sx = x0
+				if (W - x0 < sr) sr = W - x0
+			} else {
+				ch = int(W * b / a)
+				y0 = int((H - ch + 1) / 2)
+				if (y0 > sy) sy = y0
+				if (H - y0 < sb) sb = H - y0
+			}
+		}
+		printf "%dx%d+%d+%d", sr - sx, sb - sy, sx, sy
+	}'
+}
+
+# The header states the range of screens the safe area covers, and --help
+# prints the whole comment block, not a fixed line range.
+if [ ! -f "$STAMP" ]; then
+	fail 'scripts/identity-stamp.sh missing'
+elif sh "$STAMP" --help > "$TMPD/stamp-help" 2>&1; then
+	if grep -q '4:3 to 16:9' "$TMPD/stamp-help"; then
+		ok 'the stamp header states the safe area covers 4:3 to 16:9'
+	else
+		fail 'the stamp header does not state the 4:3 to 16:9 range'
+	fi
+	if grep -q '5:4, 4:3 or 16:9' "$TMPD/stamp-help"; then
+		ok 'the stamp header names the three crops of the safe area'
+	else
+		fail 'the stamp header does not name the three crops of the safe area'
+	fi
+	# The line that says what is printed lists every field, safe= too.
+	_print=$(grep -m1 'Prints one line:' "$TMPD/stamp-help")
+	if printf '%s' "$_print" | grep -q 'safe='; then
+		ok 'the stamp header lists safe= on the "Prints one line:" line'
+	else
+		fail "the stamp header does not list safe= on that line: $_print"
+	fi
+	if grep -q 'safe is the safe area' "$TMPD/stamp-help"; then
+		ok 'the stamp header says "safe is the safe area"'
+	else
+		fail 'the stamp header does not say "safe is the safe area"'
+	fi
+	if grep -q 'draw the identity line' "$TMPD/stamp-help"; then
+		ok 'identity-stamp.sh --help prints the whole comment block'
+	else
+		fail 'identity-stamp.sh --help prints only part of the comment block'
+	fi
+	if grep -q '#!/bin/sh' "$TMPD/stamp-help"; then
+		fail 'identity-stamp.sh --help prints the shebang'
+	else
+		ok 'identity-stamp.sh --help skips the shebang'
+	fi
+else
+	fail 'identity-stamp.sh --help exited non-zero'
+fi
 
 if [ -f "$IDFILE" ]; then
 	sh "$IDFILE" --product ExampleBSD --version 1.0 --base 'FreeBSD 16.0-CURRENT' --variant Cyberpunk --arch aarch64 --build 2026-11-01 > "$TMPD/identity" 2>"$TMPD/idfile.err" &&
@@ -356,12 +435,42 @@ if [ -f "$STAMP" ] && [ -f "$TMPD/identity" ]; then
 		fi
 		expect_png "$OUTP" 1920 1080
 		cmp -s "$IN" "$OUTP" && fail "stamp did not change the $v greeter" || ok "stamp changed the $v greeter"
-		G=$(kv "$R" bbox); FG=$(kv "$R" fg); PLATE=$(kv "$R" plate)
+		G=$(kv "$R" bbox); FG=$(kv "$R" fg); PLATE=$(kv "$R" plate); SAFE=$(kv "$R" safe)
 		case $G in *x*+*+*) ;; *) fail "stamp reported no bbox: $R"; continue ;; esac
-		_x=$(printf '%s' "$G" | sed -E 's/.*x[0-9]+\+([0-9]+)\+.*/\1/')
-		_y=$(printf '%s' "$G" | sed -E 's/.*\+([0-9]+)$/\1/')
-		_h=$(printf '%s' "$G" | sed -E 's/^[0-9]+x([0-9]+).*/\1/')
-		[ "$_x" -le 64 ] && [ $((_y + _h)) -ge 1000 ] && ok "$v stamp is lower left ($G)" || fail "$v stamp is not lower left ($G)"
+		case $SAFE in *x*+*+*) ;; *) fail "stamp reported no safe area: $R"; continue ;; esac
+		_x=$(box_x "$G")
+		_y=$(box_y "$G")
+		_h=$(box_h "$G")
+		# The safe area the test computes itself, from the crop
+		# geometry: the stamp must sit inside that rectangle, and not
+		# only inside the one the script reports. No magic numbers.
+		_iw=$("$IM" "$IN" -format '%w' info:)
+		_ih=$("$IM" "$IN" -format '%h' info:)
+		WSAFE=$(safe_rect "$_iw" "$_ih")
+		if [ "$SAFE" = "$WSAFE" ]; then
+			ok "$v the reported safe area $SAFE is the crop rectangle"
+		else
+			fail "$v the reported safe area is $SAFE, want $WSAFE"
+		fi
+		_sx=$(box_x "$WSAFE")
+		_sy=$(box_y "$WSAFE")
+		_sh=$(box_h "$WSAFE")
+		# The stamp must sit inside the safe area: its left edge at or
+		# right of the safe area's left edge, and the box inside the
+		# safe rectangle the test computed.
+		if [ "$_x" -ge "$_sx" ] && box_inside "$G" "$WSAFE"; then
+			ok "$v stamp is inside the safe area ($G in $WSAFE)"
+		else
+			fail "$v stamp is not inside the safe area ($G in $WSAFE)"
+		fi
+		# And in the lower left of it: the box starts in the left quarter of
+		# the safe area and ends within 80 px of its bottom edge.
+		if [ $((_x - _sx)) -le $(( $(box_w "$SAFE") / 4 )) ] &&
+			[ $((_y + _h)) -ge $((_sy + _sh - 80)) ]; then
+			ok "$v stamp is in the lower left of the safe area ($G in $SAFE)"
+		else
+			fail "$v stamp is not in the lower left of the safe area ($G in $SAFE)"
+		fi
 		if [ "$PLATE" = 0 ]; then
 			C=$(worst_contrast "$IN" "$G" "$FG")
 		else
@@ -389,6 +498,60 @@ if [ -f "$STAMP" ] && [ -f "$TMPD/identity" ]; then
 		fi
 	done
 	grep -q 'FreeBSD 16.0-CURRENT' "$TMPD/id-fit" && fail 'identity file not rewritten per base' || true
+	# The padded box must stay inside the safe area: it starts no further
+	# left than the safe area and ends inside it. With the real margin
+	# and padding that always holds, so a copy of the script is patched
+	# here to break it. Without the guard the copy would draw outside the
+	# safe area; with it, the copy refuses and says so in one line.
+	GREETER="$TMPD/out-default/lightdm/greeter-1920x1080.png"
+	if [ -f "$GREETER" ]; then
+		cp -R "$ROOT/scripts" "$TMPD/scripts-fit"
+		cp "$ROOT/palette.env" "$TMPD/palette.env"
+		for v in $VARIANTS; do
+			mkdir -p "$TMPD/variants/$v"
+			cp "$ROOT/variants/$v/palette.env" "$TMPD/variants/$v/palette.env"
+		done
+		# No margin and a padding of one pixel: the box would start one
+		# pixel left of the safe area, and must be clamped to it.
+		sed -e 's|^MARGIN=\$(( (H + 22) / 45 ))$|MARGIN=0|' \
+			-e 's|^\[ "\$MARGIN" -ge 8 \] \|\| MARGIN=8$|MARGIN=0|' \
+			-e 's|^PAD=\$(( (SIZE \* 2 + 4) / 5 ))$|PAD=1|' \
+			"$ROOT/scripts/identity-stamp.sh" > "$TMPD/scripts-fit/identity-stamp.sh"
+		if grep -q '^PAD=1$' "$TMPD/scripts-fit/identity-stamp.sh" &&
+			grep -q '^MARGIN=0$' "$TMPD/scripts-fit/identity-stamp.sh"; then
+			if R=$(sh "$TMPD/scripts-fit/identity-stamp.sh" "$TMPD/identity" \
+				"$GREETER" "$TMPD/fit-clamp.png" 2> "$TMPD/fit-clamp.err"); then
+				G=$(kv "$R" bbox)
+				WANT=$(box_x "$(safe_rect 1920 1080)")
+				if [ "$(box_x "$G")" = "$WANT" ]; then
+					ok "the padded box starts at the safe area's left edge ($G)"
+				else
+					fail "the padded box starts at $(box_x "$G"), want $WANT"
+				fi
+			else
+				fail "the patched stamp failed: $(cat "$TMPD/fit-clamp.err")"
+			fi
+		else
+			fail 'could not patch the copy of identity-stamp.sh'
+		fi
+		# No margin and a huge padding: the box cannot fit the safe area.
+		sed -e 's|^MARGIN=\$(( (H + 22) / 45 ))$|MARGIN=0|' \
+			-e 's|^\[ "\$MARGIN" -ge 8 \] \|\| MARGIN=8$|MARGIN=0|' \
+			-e 's|^PAD=\$(( (SIZE \* 2 + 4) / 5 ))$|PAD=800|' \
+			"$ROOT/scripts/identity-stamp.sh" > "$TMPD/scripts-fit/identity-stamp.sh"
+		if sh "$TMPD/scripts-fit/identity-stamp.sh" "$TMPD/identity" "$GREETER" \
+			"$TMPD/fit-guard.png" > "$TMPD/fit-guard.out" 2> "$TMPD/fit-guard.err"; then
+			fail 'a padded box that does not fit the safe area was drawn'
+		elif grep -q 'identity line does not fit in the 1350px safe area of 1920x1080' "$TMPD/fit-guard.err"; then
+			ok 'a padded box that does not fit the safe area is refused'
+		else
+			fail "the padded box does not fit the safe area but the script says: $(cat "$TMPD/fit-guard.err")"
+		fi
+		_n=$(wc -l < "$TMPD/fit-guard.err")
+		[ "$_n" -eq 1 ] && ok 'the refusal is one line' || fail "the refusal is $_n lines"
+	else
+		fail 'no greeter to stamp'
+	fi
 	# Hostile background: the text colour itself. Must back with a plate
 	# and still pass, and must refuse outright with --no-plate.
 	FGC=$(variant_get default IDENTITY_FG)
@@ -428,6 +591,33 @@ fi
 for word in 'variant' 'BRANDING-SPOTS.md' 'identity' 'docs/screenshots/'; do
 	grep -q "$word" "$ROOT/README.md" && ok "README mentions $word" || fail "README does not mention $word"
 done
+# The README says where the xfce/ tree installs.
+for word in '/etc/xdg/autostart/' 'xfce/session/'; do
+	grep -q "$word" "$ROOT/README.md" && ok "README mentions $word" || fail "README does not mention $word"
+done
+# It says what the tokens expand to, how the session helper is installed,
+# and that the helper only fills in the outputs that have no wallpaper.
+if grep -q '/usr/local/share/<slug>' "$ROOT/README.md" &&
+	grep -q '@SHARE_DIR@' "$ROOT/README.md"; then
+	ok 'README says @SHARE_DIR@ expands to /usr/local/share/<slug>'
+else
+	fail 'README does not say @SHARE_DIR@ expands to /usr/local/share/<slug>'
+fi
+if grep -q '@NAME_LOWER@' "$ROOT/README.md" && grep -q '<slug>' "$ROOT/README.md"; then
+	ok 'README says @NAME_LOWER@ expands to the slug'
+else
+	fail 'README does not say @NAME_LOWER@ expands to the slug'
+fi
+if grep -q 'root-owned' "$ROOT/README.md" && grep -q '0755' "$ROOT/README.md"; then
+	ok 'README says the session helper is installed root-owned, mode 0755'
+else
+	fail 'README does not say the session helper is installed root-owned, mode 0755'
+fi
+if grep -qi 'no wallpaper yet\|none yet' "$ROOT/README.md"; then
+	ok 'README says the helper fills in the outputs that have no wallpaper yet'
+else
+	fail 'README does not say the helper fills in the outputs that have no wallpaper yet'
+fi
 _n=0
 for p in "$ROOT"/docs/screenshots/*.png; do
 	[ -f "$p" ] || continue

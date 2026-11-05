@@ -14,10 +14,17 @@
 #
 # Layout: text height is 1/60 of the image height (min 11 px), the margin
 # 1/45 of it; the text shrinks (down to 11 px) until it fits on one line.
+# The line goes in the lower left of the safe area: the part of the image
+# left when a screen of 5:4, 4:3 or 16:9 crops it, centred, after scaling
+# to fill (a 16:9 wallpaper on a 1280x1024 screen loses 285 px of 1920
+# each side).
+# The safe area covers screens from 4:3 to 16:9: every screen in that range
+# shows it whole, a wider one crops the top and the bottom instead.
 # Contrast is measured against every background pixel under the text box
 # (worst case); below 4.5:1 an opaque plate in --plate goes behind the text.
 #
-# Prints one line: bbox=WxH+X+Y fg=HEX plate=0|1 size=PX contrast=RATIO
+# Prints one line: bbox=WxH+X+Y fg=HEX plate=0|1 size=PX contrast=RATIO safe=WxH+X+Y
+# (bbox is the text box with its padding; safe is the safe area)
 # Requires ImageMagick (magick or convert) and, preferably, fc-match.
 set -eu
 
@@ -26,7 +33,10 @@ ROOT_DIR=$(CDPATH= cd -- "$(dirname -- "$SCRIPT_DIR")" && pwd)
 . "$SCRIPT_DIR/lib-identity.sh"
 
 die() { printf 'identity-stamp.sh: error: %s\n' "$*" >&2; exit 1; }
-usage() { sed -n '3,24s/^# \{0,1\}//p' "$0"; }
+usage() {
+	# the leading comment block, up to the first line that is not a comment
+	awk 'NR == 1 { next } /^#/ { sub(/^#[[:space:]]?/, ""); print; next } { exit }' "$0"
+}
 
 PALETTE="$ROOT_DIR/palette.env"
 VARIANT=${ARTWORK_VARIANT:-default}
@@ -89,20 +99,41 @@ measure() {
 	# measure SIZE : print "WIDTH HEIGHT" of TEXT at SIZE px
 	"$IM" -density 72 -font "$FONT_ARG" -pointsize "$1" label:"$TEXT" -format '%w %h' info:
 }
+# Safe area: the intersection of the centred 5:4, 4:3 and 16:9 crops.
+# SX SY: its top-left corner; SW: its width; SB: its bottom edge.
+SX=0 SY=0 SR=$W SB=$H
+for _r in 5:4 4:3 16:9; do
+	_a=${_r%:*} _b=${_r#*:}
+	if [ $((W * _b)) -gt $((H * _a)) ]; then
+		_x0=$(( (W - H * _a / _b + 1) / 2 ))
+		[ "$_x0" -le "$SX" ] || SX=$_x0
+		[ $((W - _x0)) -ge "$SR" ] || SR=$((W - _x0))
+	else
+		_y0=$(( (H - W * _b / _a + 1) / 2 ))
+		[ "$_y0" -le "$SY" ] || SY=$_y0
+		[ $((H - _y0)) -ge "$SB" ] || SB=$((H - _y0))
+	fi
+done
+SW=$((SR - SX))
+
 while :; do
 	set -- $(measure "$SIZE")
 	TW=$1 TH=$2
-	[ $((TW + 2 * MARGIN)) -le "$W" ] && break
-	[ "$SIZE" -gt 11 ] || die "identity line does not fit on one line at ${W}px: $TEXT"
+	[ $((TW + 2 * MARGIN)) -le "$SW" ] && break
+	[ "$SIZE" -gt 11 ] || die "identity line does not fit at ${W}x${H}: $TEXT"
 	SIZE=$((SIZE - 1))
 done
 
 PAD=$(( (SIZE * 2 + 4) / 5 ))
-TX=$MARGIN
-TY=$((H - BOTTOM - MARGIN - TH))
-[ "$TY" -gt "$PAD" ] || die "image too short for the identity line"
+TX=$((SX + MARGIN))
+TY=$((SB - BOTTOM - MARGIN - TH))
+[ "$TY" -gt $((SY + PAD)) ] || die "image too short for the identity line"
 BX=$((TX - PAD)) BY=$((TY - PAD)) BW=$((TW + 2 * PAD)) BH=$((TH + 2 * PAD))
-[ "$BX" -ge 0 ] || BX=0
+# The padded box stays inside the safe area: its left edge no further left
+# than the safe area's, its right edge inside it.
+[ "$BX" -ge "$SX" ] || BX=$SX
+[ $((BX + BW)) -le $((SX + SW)) ] ||
+	die "identity line does not fit in the ${SW}px safe area of ${W}x${H}"
 BBOX="${BW}x${BH}+${BX}+${BY}"
 
 # ------------------------------------------------------------- contrast
@@ -153,4 +184,4 @@ else
 		-annotate "+$TX+$TY" "$TEXT" "$OUT"
 fi
 
-printf 'bbox=%s fg=%s plate=%s size=%s contrast=%s\n' "$BBOX" "$FG" "$USE_PLATE" "$SIZE" "$CONTRAST"
+printf 'bbox=%s fg=%s plate=%s size=%s contrast=%s safe=%s\n' "$BBOX" "$FG" "$USE_PLATE" "$SIZE" "$CONTRAST" "${SW}x$((SB - SY))+$SX+$SY"
