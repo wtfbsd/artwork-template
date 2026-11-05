@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=@NAME@ wallpaper
+Comment=Fill in the @NAME@ wallpaper on the outputs that have none yet
+Exec=/bin/sh "@SHARE_DIR@/xfce/session/@NAME_LOWER@-wallpaper.sh"
+OnlyShowIn=XFCE;
+NoDisplay=true
+Terminal=false
