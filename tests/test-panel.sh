@@ -11,6 +11,18 @@
 # and falls back to its stock layout (a second, bottom dock panel). xfconf
 # arrays hold <value> children; a nested <property> is not an array item.
 #
+# Each panel must also span the screen and stay put, with the types
+# xfce4-panel's stock layout uses (xfconf properties are type-tagged):
+# exactly one /panels/panel-N/length, type uint value 100, and
+# /panels/panel-N/length-adjust, when present, type bool value false --
+# or xfce4-panel draws a short box in the corner that grows as windows
+# open instead of a full-width bar. Each panel must also have exactly one
+# /panels/panel-N/position-locked, type bool value true, so it cannot be
+# dragged off its edge. A clock plugin (a /plugins/plugin-M whose value is
+# "clock") that sets a mode must set it as type uint value 2 (digital):
+# 0 is analog, 1 the binary dot-grid, 3 fuzzy and 4 LCD; no mode means
+# the plugin's default, which is digital.
+#
 # Checks the source file and the rendered one (out/xfce/xfconf/), and first
 # proves the checker rejects each broken layout it is meant to catch.
 set -eu
@@ -100,6 +112,7 @@ else:
         bad("/configver is %s; below 2 xfce4-panel migrates the channel" % cv.get("value"))
 
 plugins = {}
+plugin_els = {}
 if "plugins" not in top:
     bad("no /plugins property")
 else:
@@ -117,6 +130,21 @@ else:
             bad("/plugins/%s does not name a plugin (type=%r value=%r)"
                 % (p.get("name"), p.get("type"), p.get("value")))
         plugins[int(m.group(1))] = p.get("value")
+        plugin_els[int(m.group(1))] = p
+
+# The clock plugin's mode is 0 analog, 1 binary, 2 digital, 3 fuzzy, 4 LCD.
+# Mode 1 renders as a grid of dots that reads as broken; the pack ships the
+# digital clock. No mode property means the plugin default, which is digital.
+for _m in sorted(plugin_els):
+    _el = plugin_els[_m]
+    if _el.get("value") != "clock":
+        continue
+    for q in _el.findall("property"):
+        if q.get("name") != "mode":
+            continue
+        if q.get("type") != "uint" or q.get("value") != "2":
+            bad("/plugins/plugin-%d is a clock with mode type=%r value=%r, not uint 2 (digital)"
+                % (_m, q.get("type"), q.get("value")))
 
 if "panels" not in top:
     bad("no /panels property (found top-level: %s)" % ", ".join(sorted(top)))
@@ -161,6 +189,42 @@ else:
                 bad("/panels/panel-%d/position %r is not on the top edge (p must be one of %s);"
                     " the identity line sits in the lower-left corner"
                     % (n, p.get("value"), sorted(TOP_SNAPS)))
+        # A panel spans the screen only when it has exactly one
+        # /panels/panel-N/length of type uint value 100 (a percentage of the
+        # screen edge, the type xfce4-panel's stock layout uses) and
+        # length-adjust, when present, is type bool value false; with
+        # length-adjust true, or with no length at all, xfce4-panel draws a
+        # short box in the corner that grows as windows open.
+        lens = [p for p in children[n].findall("property") if p.get("name") == "length"]
+        if not lens:
+            bad("/panels/panel-%d has no length property (need exactly one: type uint, value 100)" % n)
+        elif len(lens) != 1:
+            bad("/panels/panel-%d has %d length properties, not exactly one" % (n, len(lens)))
+        for p in lens:
+            if p.get("type") != "uint" or p.get("value") != "100":
+                bad("/panels/panel-%d/length is type=%r value=%r, not type uint value 100"
+                    % (n, p.get("type"), p.get("value")))
+        for p in children[n].findall("property"):
+            if p.get("name") != "length-adjust":
+                continue
+            if p.get("type") != "bool" or p.get("value") != "false":
+                bad("/panels/panel-%d/length-adjust is type=%r value=%r, not type bool value"
+                    " false: the panel shrinks to fit its plugins instead of spanning the"
+                    " screen" % (n, p.get("type"), p.get("value")))
+        # position-locked keeps the panel on its edge; the stock layout sets
+        # it as type bool value true, and each panel needs exactly one.
+        locks = [p for p in children[n].findall("property") if p.get("name") == "position-locked"]
+        if not locks:
+            bad("/panels/panel-%d has no position-locked property (need exactly one:"
+                " type bool, value true)" % n)
+        elif len(locks) != 1:
+            bad("/panels/panel-%d has %d position-locked properties, not exactly one"
+                % (n, len(locks)))
+        for p in locks:
+            if p.get("type") != "bool" or p.get("value") != "true":
+                bad("/panels/panel-%d/position-locked is type=%r value=%r, not type bool value"
+                    " true: the panel can be dragged off its edge"
+                    % (n, p.get("type"), p.get("value")))
         where = "/panels/panel-%d/plugin-ids" % n
         pids = [p for p in children[n].findall("property") if p.get("name") == "plugin-ids"]
         if len(pids) != 1:
@@ -207,9 +271,11 @@ panel() { printf '<property name="panel-%s" type="empty">%s</property>' "$1" "$2
 
 # ------------------------------------------------ 1. the checker can fail
 POS='<property name="position" type="string" value="p=6;x=0;y=0"/>'
+LOCKED='<property name="position-locked" type="bool" value="true"/>'
+LENGTH='<property name="length" type="uint" value="100"/>'
 IDS1='<property name="plugin-ids" type="array"><value type="int" value="1"/></property>'
 PLUGINS='<property name="plugins" type="empty"><property name="plugin-1" type="string" value="clock"/></property>'
-PANEL1=$(panel 1 "$POS$IDS1")
+PANEL1=$(panel 1 "$POS$LOCKED$LENGTH$IDS1")
 CV='<property name="configver" type="int" value="2"/>'
 GOOD=$(chan "$CV$(panels 1 "$PANEL1")$PLUGINS")
 printf '%s\n' "$GOOD" > "$TMPD/good.xml"
@@ -264,6 +330,28 @@ expect_reject configver-string '/configver is type=' \
 	"$(chan "<property name=\"configver\" type=\"string\" value=\"2\"/>$(panels 1 "$PANEL1")$PLUGINS")"
 expect_reject configver-old '/configver is 1' \
 	"$(chan "<property name=\"configver\" type=\"int\" value=\"1\"/>$(panels 1 "$PANEL1")$PLUGINS")"
+expect_reject panel-length-missing 'has no length property' \
+	"$(chan "$CV$(panels 1 "$(panel 1 "$POS$LOCKED$IDS1")")$PLUGINS")"
+expect_reject panel-length-double "length is type='double' value='100', not type uint value 100" \
+	"$(chan "$CV$(panels 1 "$(panel 1 "$POS$LOCKED<property name=\"length\" type=\"double\" value=\"100\"/>$IDS1")")$PLUGINS")"
+expect_reject panel-length-not-100 "length is type='uint' value='50', not type uint value 100" \
+	"$(chan "$CV$(panels 1 "$(panel 1 "$POS$LOCKED<property name=\"length\" type=\"uint\" value=\"50\"/>$IDS1")")$PLUGINS")"
+expect_reject panel-length-string "length is type='string' value='100', not type uint value 100" \
+	"$(chan "$CV$(panels 1 "$(panel 1 "$POS$LOCKED<property name=\"length\" type=\"string\" value=\"100\"/>$IDS1")")$PLUGINS")"
+expect_reject length-adjust-true "length-adjust is type='bool' value='true', not type bool value false" \
+	"$(chan "$CV$(panels 1 "$(panel 1 "$POS$LOCKED$LENGTH$IDS1<property name=\"length-adjust\" type=\"bool\" value=\"true\"/>")")$PLUGINS")"
+expect_reject length-adjust-one "length-adjust is type='bool' value='1', not type bool value false" \
+	"$(chan "$CV$(panels 1 "$(panel 1 "$POS$LOCKED$LENGTH$IDS1<property name=\"length-adjust\" type=\"bool\" value=\"1\"/>")")$PLUGINS")"
+expect_reject position-locked-missing 'has no position-locked property' \
+	"$(chan "$CV$(panels 1 "$(panel 1 "$POS$LENGTH$IDS1")")$PLUGINS")"
+expect_reject position-locked-false "position-locked is type='bool' value='false', not type bool value true" \
+	"$(chan "$CV$(panels 1 "$(panel 1 "$POS<property name=\"position-locked\" type=\"bool\" value=\"false\"/>$LENGTH$IDS1")")$PLUGINS")"
+expect_reject clock-mode-binary "clock with mode type='uint' value='1', not uint 2" \
+	"$(chan "$CV$(panels 1 "$PANEL1")<property name=\"plugins\" type=\"empty\"><property name=\"plugin-1\" type=\"string\" value=\"clock\"><property name=\"mode\" type=\"uint\" value=\"1\"/></property></property>")"
+expect_reject clock-mode-int "clock with mode type='int' value='2', not uint 2" \
+	"$(chan "$CV$(panels 1 "$PANEL1")<property name=\"plugins\" type=\"empty\"><property name=\"plugin-1\" type=\"string\" value=\"clock\"><property name=\"mode\" type=\"int\" value=\"2\"/></property></property>")"
+expect_reject clock-mode-string "clock with mode type='string' value='2', not uint 2" \
+	"$(chan "$CV$(panels 1 "$PANEL1")<property name=\"plugins\" type=\"empty\"><property name=\"plugin-1\" type=\"string\" value=\"clock\"><property name=\"mode\" type=\"string\" value=\"2\"/></property></property>")"
 
 # ------------------------------------------------ 2. the source file
 if _out=$(check_panel "$SRC" 2>&1); then

@@ -11,6 +11,14 @@
   position is "p=SNAP;x=X;y=Y" (all three, or it is ignored); SNAP 6 is the
   top-left snap, which puts a horizontal panel along the top edge.
   Keep it on the top edge: the identity line is in the lower-left corner.
+  length is the panel's share of the screen edge in percent (type uint,
+  value 100 = full width, as in xfce4-panel's stock layout) and only
+  applies while length-adjust is false: with length-adjust true, or with
+  no length at all, xfce4-panel draws a short box in the corner that
+  grows as windows open. position-locked keeps the panel from being
+  dragged off its edge. The clock plugin's mode is 2 (digital, type uint
+  as in the stock layout); mode 1 is the binary clock, which renders as
+  a grid of dots.
   configver is xfce4-panel's config version (2, as in its stock layout);
   below that it runs its migration over this channel.
 -->
@@ -21,7 +29,9 @@
     <value type="int" value="1"/>
     <property name="panel-1" type="empty">
       <property name="position" type="string" value="p=6;x=0;y=0"/>
-      <property name="length-adjust" type="bool" value="true"/>
+      <property name="position-locked" type="bool" value="true"/>
+      <property name="length" type="uint" value="100"/>
+      <property name="length-adjust" type="bool" value="false"/>
       <property name="size" type="uint" value="30"/>
       <property name="plugin-ids" type="array">
         <value type="int" value="1"/>
@@ -49,7 +59,7 @@
       <property name="show-frame" type="bool" value="false"/>
     </property>
     <property name="plugin-5" type="string" value="clock">
-      <property name="mode" type="uint" value="1"/>
+      <property name="mode" type="uint" value="2"/>
       <property name="show-frame" type="bool" value="false"/>
     </property>
     <property name="plugin-6" type="string" value="actions"/>
