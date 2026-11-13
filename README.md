@@ -28,7 +28,8 @@ sh scripts/render.sh --variant cyberpunk      # the cyberpunk variant
 sh scripts/rebrand.sh "My OS" 4488CC 26B67C   # new name and colours, re-render
 sh scripts/pack.sh                            # pre-rendered packs into dist/
 sh tests/test-render.sh && sh tests/test-branding.sh &&
-    sh tests/test-pack.sh && sh tests/test-portability.sh
+    sh tests/test-pack.sh && sh tests/test-portability.sh &&
+    sh tests/test-panel.sh
 ```
 
 ## Where the branding goes
@@ -177,7 +178,7 @@ from a pack needs ImageMagick only. Rendering locally remains the fallback.
 - **fontconfig** (`fc-match`) and the **DejaVu** fonts (Sans and Sans Mono),
   the only fonts the art uses.
 - **xz** and **sha256sum** or **sha256**: `pack.sh`.
-- **python3**: the tests read PNG headers with it.
+- **python3**: the tests read PNG headers and the panel XML with it.
 
 ## Style rules
 
@@ -198,6 +199,7 @@ from a pack needs ImageMagick only. Rendering locally remains the fallback.
 | `tests/test-branding.sh` | both variants render every asset and differ; overrides are real; every display-manager asset exists, uses the variant's palette and the product logo; `spots.tsv` is well formed and every source and rendered path exists; rebrand reaches every display-manager asset; the identity line fits on one line at 1024 px and keeps 4.5:1 contrast (measured in the test), and is refused below it; README and previews |
 | `tests/test-pack.sh` | one verified pack per variant, with everything a template installs |
 | `tests/test-portability.sh` | no GNU-only `grep`, `sed` or shell constructs |
+| `tests/test-panel.sh` | `xfce4-panel.xml`, source and rendered, declares `/panels` as an int array whose ids match the `panel-N` children, every plugin id a panel lists is defined under `/plugins` and every defined plugin is listed, no panel or plugin is defined twice, and each panel has one position that parses as `p=N;x=N;y=N` and sits on the top edge, clear of the identity line |
 
 To try the scripts with non-GNU tools, put busybox `grep`, `sed` and `awk`
 first on `PATH` and run the suites again. `sh scripts/previews.sh`

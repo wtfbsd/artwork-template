@@ -1,48 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  @NAME@ single bottom Xfce panel.
+  @NAME@ single top Xfce panel.
   Install under ~/.config/xfce4/xfconf/xfce-perchannel-xml/ (or seed via
   your packaging/first-boot tooling).
+
+  xfce4-panel reads the panel ids from /panels and each panel's plugins from
+  /panels/panel-N/plugin-ids; both are arrays of <value type="int">. When
+  /panels is not such an array, xfce4-panel uses its stock layout instead.
+  position is "p=SNAP;x=X;y=Y" (all three, or it is ignored); SNAP 6 is the
+  top-left snap, which puts a horizontal panel along the top edge.
+  Keep it on the top edge: the identity line is in the lower-left corner.
+  configver is xfce4-panel's config version (2, as in its stock layout);
+  below that it runs its migration over this channel.
 -->
 
 <channel name="xfce4-panel" version="1.0">
-  <property name="config" type="empty">
-    <property name="panels" type="empty">
-      <property name="panel-1" type="empty">
-        <property name="position" type="string" value="p=6;o=76"/>
-        <property name="length-adjust" type="bool" value="true"/>
-        <property name="size" type="uint" value="30"/>
-        <property name="plugin-ids" type="array">
-          <property name="plugin-1" type="int" value="1"/>
-          <property name="plugin-2" type="int" value="2"/>
-          <property name="plugin-3" type="int" value="3"/>
-          <property name="plugin-4" type="int" value="4"/>
-          <property name="plugin-5" type="int" value="5"/>
-          <property name="plugin-6" type="int" value="6"/>
-        </property>
+  <property name="configver" type="int" value="2"/>
+  <property name="panels" type="array">
+    <value type="int" value="1"/>
+    <property name="panel-1" type="empty">
+      <property name="position" type="string" value="p=6;x=0;y=0"/>
+      <property name="length-adjust" type="bool" value="true"/>
+      <property name="size" type="uint" value="30"/>
+      <property name="plugin-ids" type="array">
+        <value type="int" value="1"/>
+        <value type="int" value="2"/>
+        <value type="int" value="3"/>
+        <value type="int" value="4"/>
+        <value type="int" value="5"/>
+        <value type="int" value="6"/>
       </property>
     </property>
-    <property name="plugins" type="empty">
-      <property name="plugin-1" type="string" value="applicationsmenu">
-        <property name="button-icon" type="string" value="@NAME_LOWER@-menu"/>
-        <property name="button-title" type="string" value="@NAME@"/>
-      </property>
-      <property name="plugin-2" type="string" value="tasklist">
-        <property name="grouping" type="uint" value="1"/>
-      </property>
-      <property name="plugin-3" type="string" value="separator">
-        <property name="style" type="uint" value="0"/>
-        <property name="expand" type="bool" value="true"/>
-      </property>
-      <property name="plugin-4" type="string" value="systray">
-        <property name="show-frame" type="bool" value="false"/>
-      </property>
-      <property name="plugin-5" type="string" value="clock">
-        <property name="mode" type="uint" value="1"/>
-        <property name="show-frame" type="bool" value="false"/>
-      </property>
-      <property name="plugin-6" type="string" value="actions"/>
+  </property>
+  <property name="plugins" type="empty">
+    <property name="plugin-1" type="string" value="applicationsmenu">
+      <property name="button-icon" type="string" value="@NAME_LOWER@-menu"/>
+      <property name="button-title" type="string" value="@NAME@"/>
     </property>
+    <property name="plugin-2" type="string" value="tasklist">
+      <property name="grouping" type="uint" value="1"/>
+    </property>
+    <property name="plugin-3" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+      <property name="expand" type="bool" value="true"/>
+    </property>
+    <property name="plugin-4" type="string" value="systray">
+      <property name="show-frame" type="bool" value="false"/>
+    </property>
+    <property name="plugin-5" type="string" value="clock">
+      <property name="mode" type="uint" value="1"/>
+      <property name="show-frame" type="bool" value="false"/>
+    </property>
+    <property name="plugin-6" type="string" value="actions"/>
   </property>
 </channel>
